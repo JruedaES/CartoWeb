@@ -44,52 +44,96 @@ $(function () {
          index.mostrarmodal();
 
       },
-      mostrarmodal : function (){
+      mostrarmodal: function () {
          $modal_mapa = document.getElementById('modal_mapa');
 
-         $modal_mapa.addEventListener('click', async()=>{
 
+         $modal_mapa.addEventListener('click', async () => {
             const { value: formValues } = await Swal.fire({
                title: 'Agregar nueva Capa',
+               allowOutsideClick: false,
+               allowEscapeKey: false,
+               showCancelButton: true,
+               cancelButtonText: 'Cerrar',
                html:
-               ' <div class="mb-3">'+
-               '<Label>Nombre</label>'+
-                 '<input id="swal-input1" class="swal2-input">' +
-                 '</div>'+
-                 ' <div class="mb-3">'+
-                 '<Label>Ruta</label>'+
-                 '<input id="swal-input2" class="swal2-input">'+
-                 '</div>'+
-                 ' <div class="mb-3">'+
-                 '<Label>Z Minimo</label>'+
-                 '<input id="swal-input3" class="swal2-input">'+
-                 '</div>'+
-                 ' <div class="mb-3">'+
-                 '<Label>Z Maximo</label>'+
-                 '<input id="swal-input4" class="swal2-input">'+
-                 '</div>',
-               focusConfirm: false,
+                  ' <div class="mb-3">' +
+                  '<Label>Nombre</label>' +
+                  '<input id="swal-input1" class="swal2-input">' +
+                  '</div>' +
+                  ' <div class="mb-3">' +
+                  '<Label>Ruta</label>' +
+                  '<input id="swal-input2" class="swal2-input">' +
+                  '</div>' +
+                  ' <div class="mb-3">' +
+                  '<Label>Z Minimo</label>' +
+                  '<input type="number" id="swal-input3" class="swal2-input">' +
+                  '</div>' +
+                  ' <div class="mb-3">' +
+                  '<Label>Z Maximo</label>' +
+                  '<input type="number" id="swal-input4" class="swal2-input">' +
+                  '</div>',
+               focusConfirm: true,
                preConfirm: () => {
-                 return {
-                  "code": datos.length + 100,
-                  "name": document.getElementById('swal-input1').value,
-                  "route": document.getElementById('swal-input2').value,
-                  "minZoom": document.getElementById('swal-input3').value,
-                  "maxZoom":   document.getElementById('swal-input4').value,
-                 }
+                  let json = {
+                     "code": datos.length + 100,
+                     "name": document.getElementById('swal-input1').value,
+                     "route": document.getElementById('swal-input2').value,
+                     "minZoom": document.getElementById('swal-input3').value,
+                     "maxZoom": document.getElementById('swal-input4').value,
+                  };
+                  if (index.isValidURL(json.route)){
+                  if (parseInt(json.minZoom) < parseInt(json.maxZoom)) {
+                     if (parseInt(json.maxZoom) >= 0 && parseInt(json.maxZoom) <= 20) {
+                        if (parseInt(json.minZoom) >= 0 && parseInt(json.minZoom) <= 20) {
+                           if (index.validarModal(json)) {
+                              datos.push(json);
+                              document.querySelector("#selecetMapaBase").innerHTML = '';
+                              userAction();
+                              Swal.fire(
+                                 'Información',
+                                 'El mapa base se ha agregado con exito',
+                                 'information'
+                              );
+
+                           } else {
+                              Swal.showValidationMessage('Ha ocurrido un error, todos los datos son obligatorios.');
+                           }
+                        } else {
+                           Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom minimo debe estar entre 0 y 20');
+                        }
+                     } else {
+                        Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom maximo debe estar entre 0 y 20');
+                     }
+                  } else {
+                     Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom minimo debe ser menor al Zoom maximo');
+                  }
+               } else {
+                  Swal.showValidationMessage('Ha ocurrido un error, La ruta ingresada no es valida, ingrese otra e intente nuevamente');
                }
-             });
+                  return json;
+               }
+            });
 
-           datos.push(formValues);
-            alert('Agregado!');
-            document.querySelector("#selecetMapaBase").innerHTML = '';
-            userAction();
+         });
 
-             
-         })
-      }
+      },
+      validarModal: function (formValues) {
+         if (formValues.name != '') {
+            if (formValues.route != '') {
+               if (formValues.minZoom != '') {
+                  if (formValues.maxZoom != '') {
+                     return true;
+                  } else { return false }
+               } else { return false }
+            } else { return false }
+         } else { return false };
+      },
+       isValidURL : function(string) {
+         var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+         return (res !== null)
+     }
    };
-$(document).ready(function () {
-   index.inicio();
-});
+   $(document).ready(function () {
+      index.inicio();
+   });
 });
