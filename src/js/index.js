@@ -65,11 +65,11 @@ $(function () {
                   '<input id="swal-input2" class="swal2-input">' +
                   '</div>' +
                   ' <div class="mb-3">' +
-                  '<Label>Z Minimo</label>' +
+                  '<Label>Z Mínimo</label>' +
                   '<input type="number" id="swal-input3" class="swal2-input">' +
                   '</div>' +
                   ' <div class="mb-3">' +
-                  '<Label>Z Maximo</label>' +
+                  '<Label>Z Máximo</label>' +
                   '<input type="number" id="swal-input4" class="swal2-input">' +
                   '</div>',
                focusConfirm: true,
@@ -91,7 +91,7 @@ $(function () {
                               userAction();
                               Swal.fire(
                                  'Información',
-                                 'El mapa base se ha agregado con exito',
+                                 'El mapa base se ha agregado con éxito',
                                  'information'
                               );
 
@@ -99,13 +99,13 @@ $(function () {
                               Swal.showValidationMessage('Ha ocurrido un error, todos los datos son obligatorios.');
                            }
                         } else {
-                           Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom minimo debe estar entre 0 y 20');
+                           Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom mínimo debe estar entre 0 y 20');
                         }
                      } else {
-                        Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom maximo debe estar entre 0 y 20');
+                        Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom máximo debe estar entre 0 y 20');
                      }
                   } else {
-                     Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom minimo debe ser menor al Zoom maximo');
+                     Swal.showValidationMessage('Ha ocurrido un error, El nivel de Zoom mínimo debe ser menor al Zoom máximo');
                   }
                } else {
                   Swal.showValidationMessage('Ha ocurrido un error, La ruta ingresada no es valida, ingrese otra e intente nuevamente');
